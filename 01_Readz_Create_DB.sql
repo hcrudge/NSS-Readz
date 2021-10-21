@@ -1,10 +1,14 @@
 ﻿USE [master]
 
-IF db_id('Readz') IS NULL
-	CREATE DATABASE [Readz]
+
+IF db_id('Readz') IS NOT NULL
+	DROP DATABASE [Readz];
 GO
 
-USE [Readz]
+CREATE DATABASE [Readz];
+GO
+
+USE [Readz];
 GO
 
 
@@ -36,7 +40,7 @@ CREATE TABLE [Post] (
   [BookAuthor] nvarchar(255) NOT NULL,
   [BookCover] nvarchar(255) NOT NULL,
   [BookSynopsis] nvarchar(1000) NOT NULL,
-  [PublishedOn] datetime NOT NULL,
+  [PublishedOn] datetime,
   [UserProfileId] integer NOT NULL,
 
   CONSTRAINT [FK_Post_UserProfile] FOREIGN KEY ([UserProfileId]) REFERENCES [UserProfile] ([Id])
