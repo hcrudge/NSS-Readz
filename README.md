@@ -1,3 +1,3 @@
-# FirebaseMVC
+# Readz
 
-A simple example of using Firebase Authentication in an MVC app
+Back-End Capstone project for Nashville Software School using C#/.Net MVC.
