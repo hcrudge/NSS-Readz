@@ -12,6 +12,7 @@ namespace Readz.Models
         public int Id { get; set; }
 
         [Required]
+        [DisplayName("Review Title")]
         public string PostTitle { get; set; }
 
         
@@ -20,6 +21,7 @@ namespace Readz.Models
         public string ReviewContent { get; set; }
 
         [Required]
+        [DisplayName("Book Title")]
         public string BookTitle { get; set; }
 
         [Required] 
@@ -43,6 +45,7 @@ namespace Readz.Models
         [DisplayName("Post Author")]
         public int UserProfileId { get; set; }
 
+       
         public UserProfile UserProfile { get; set; }
 
 

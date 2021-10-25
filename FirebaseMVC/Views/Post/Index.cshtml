@@ -4,34 +4,26 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1>Reviews:</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <button type="button" class="btn" asp-action="Create">Create New Review</button>
 </p>
-<table class="table">
-    <thead>
+<table class="table content">
+    <thead class="text">
         <tr>
+           
             <th>
-                @Html.DisplayNameFor(model => model.Id)
+              
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.PostTitle)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ReviewContent)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.BookTitle)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.BookAuthor)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.BookCover)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.BookSynopsis)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.PublishedOn)
@@ -45,34 +37,26 @@
     <tbody>
 @foreach (var item in Model) {
         <tr>
+          
             <td>
-                @Html.DisplayFor(modelItem => item.Id)
+                <img src="@item.BookCover" alt="BookCover") />
             </td>
-            <td>
+            <td class="align-middle font-weight-bold" >
                 @Html.DisplayFor(modelItem => item.PostTitle)
             </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ReviewContent)
-            </td>
-            <td>
+            <td class="align-middle">
                 @Html.DisplayFor(modelItem => item.BookTitle)
             </td>
-            <td>
+            <td class="align-middle">
                 @Html.DisplayFor(modelItem => item.BookAuthor)
             </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.BookCover)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.BookSynopsis)
-            </td>
-            <td>
+            <td class="align-middle">
                 @Html.DisplayFor(modelItem => item.PublishedOn)
             </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.UserProfileId)
+            <td class="align-middle">
+                @Html.DisplayFor(modelItem => item.UserProfile.UserName)
             </td>
-            <td>
+            <td class="align-middle">
                 @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
                 @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
                 @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
