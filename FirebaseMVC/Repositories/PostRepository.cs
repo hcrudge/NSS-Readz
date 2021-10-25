@@ -46,6 +46,45 @@ namespace Readz.Repositories
         }
 
 
+        public Post GetPublishedPostById(int id)
+        {
+            using (var conn = Connection)
+            {
+                conn.Open();
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"
+                        SELECT p.Id, p.PostTitle, p.ReviewContent, p.BookTitle,
+                            p.BookAuthor, p.BookCover, p.BookSynopsis, p.PublishedOn,
+                            p.UserProfileId,
+
+                            u.UserName, u.Email, u.ImageLocation
+
+                        FROM Post p
+                            LEFT JOIN UserProfile u on p.UserProfileId = u.Id
+                        WHERE p.PublishedOn < SYSDATETIME()
+                            AND p.Id = @id 
+                    ";
+
+                    cmd.Parameters.AddWithValue("@id", id);
+                    var reader = cmd.ExecuteReader();
+
+                    Post post = null;
+
+                    if(reader.Read())
+                    {
+                        post = NewPostFromReader(reader);
+                    }
+                    reader.Close();
+                    return post;
+
+                }
+            }
+        }
+
+
+
+
 
         private Post NewPostFromReader(SqlDataReader reader)
         {

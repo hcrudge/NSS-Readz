@@ -7,6 +7,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Security.Claims;
+using Readz.Models.ViewModels;
 
 namespace Readz.Controllers
 {
@@ -14,6 +16,7 @@ namespace Readz.Controllers
     public class PostController : Controller
     {
         private readonly IPostRepository _postRepository;
+        
 
         public PostController(IPostRepository postRepository)
         {
@@ -27,15 +30,31 @@ namespace Readz.Controllers
         public IActionResult Index()
         {
             //PostListViewModel is used to pass the current
-            //User
-            List<Post> posts = _postRepository.GetAllPublishedPosts();
-            return View(posts);
+            //user's id
+            var vm = new PostListViewModel() { UserId = GetCurrentUserProfileId() };
+
+            vm.Posts =  _postRepository.GetAllPublishedPosts();
+            return View(vm);
         }
 
         // GET: PostController/Details/5
         public ActionResult Details(int id)
         {
-            return View();
+            int userId = GetCurrentUserProfileId();
+
+            var post = _postRepository.GetPublishedPostById(id);
+            if (post == null)
+            {
+                return NotFound();
+            }
+            PostDetailsViewModel vm = new PostDetailsViewModel
+            {
+                Post = post,
+                CurrentUserId = userId,
+                PostId = id,
+            };
+
+            return View(vm);
         }
 
         // GET: PostController/Create
@@ -99,6 +118,12 @@ namespace Readz.Controllers
             {
                 return View();
             }
+        }
+
+        private int GetCurrentUserProfileId()
+        {
+            string id = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            return int.Parse(id);
         }
     }
 }
