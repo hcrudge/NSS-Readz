@@ -36,8 +36,8 @@ namespace Readz.Models
 
         [DisplayName("Article Published")]
         [DataType(DataType.Date)]
-        //as DateTime is a struct not a class, it is a DateTime object not a
-        // reference. Adding the question mark makes at a nullable type
+        // Adding the question mark makes the DateTime structure (not class)
+        // a nullable type. DateTime is not a reference to another class.
         public DateTime? PublishedOn { get; set;  }  
             
         [DisplayName("Post Author")]

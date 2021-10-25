@@ -1,0 +1,84 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.Data.SqlClient;
+using Microsoft.Extensions.Configuration;
+using Readz.Models;
+using Readz.Utils;
+
+namespace Readz.Repositories
+{
+    public class PostRepository : BaseRepository, IPostRepository
+    {
+        public PostRepository(IConfiguration config) : base(config) { }
+
+        public List<Post> GetAllPublishedPosts()
+        {
+            using (var conn = Connection)
+            {
+                conn.Open();
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"
+                            SELECT p.Id, p.PostTitle, p.ReviewContent, p.BookTitle,
+                            p.BookAuthor, p.BookCover, p.BookSynopsis, p.PublishedOn,
+                            p.UserProfileId,
+
+                            u.UserName, u.Email, u.ImageLocation
+
+                            FROM Post p
+                            LEFT JOIN UserProfile u on p.UserProfileId = u.Id
+                            WHERE p.PublishedOn < SYSDATETIME()
+                            ORDER BY p.PublishedOn DESC";
+                    var reader = cmd.ExecuteReader();
+
+                    var posts = new List<Post>();
+
+                    while (reader.Read())
+                    {
+                        posts.Add(NewPostFromReader(reader));
+                    }
+                    reader.Close();
+                    return posts;
+                }
+            }
+        }
+
+
+
+        private Post NewPostFromReader(SqlDataReader reader)
+        {
+            return new Post()
+            {
+                Id = reader.GetInt32(reader.GetOrdinal("Id")),
+                PostTitle = reader.GetString(reader.GetOrdinal("PostTitle")),
+                ReviewContent = reader.GetString(reader.GetOrdinal("ReviewContent")),
+                BookTitle = reader.GetString(reader.GetOrdinal("BookTitle")),
+                BookAuthor = reader.GetString(reader.GetOrdinal("BookAuthor")),
+                BookCover = reader.GetString(reader.GetOrdinal("BookCover")),
+                BookSynopsis = reader.GetString(reader.GetOrdinal("BookSynopsis")),
+                PublishedOn = DbUtils.GetNullableDateTime(reader, "PublishedOn"),
+                UserProfileId = reader.GetInt32(reader.GetOrdinal("UserProfileId")),
+                UserProfile = new UserProfile()
+                {
+                    Id = reader.GetInt32(reader.GetOrdinal("UserProfileId")),
+                    UserName = reader.GetString(reader.GetOrdinal("UserName")),
+                    Email = reader.GetString(reader.GetOrdinal("Email")),
+                    ImageLocation = DbUtils.GetNullableString(reader, "ImageLocation"),
+
+                }
+            };
+        }
+
+
+
+
+
+
+
+
+
+
+    }
+}
