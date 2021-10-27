@@ -2,9 +2,6 @@
 {
     public class FirebaseUser
     {
-    
-
-    
         public string Email { get; }
         public string FirebaseUserId { get; }
 
