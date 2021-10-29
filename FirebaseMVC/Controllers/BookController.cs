@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Readz.GoogleBooks;
+using Readz.GoogleBooks.Models;
 
 namespace Readz.Controllers
 {
@@ -13,17 +14,28 @@ namespace Readz.Controllers
         private readonly IGoogleBooksService _GBService;
 
         //Dependency Injection
-        public BookController (IGoogleBooksService googleBooksService)
+        public BookController(IGoogleBooksService googleBooksService)
         {
             _GBService = googleBooksService;
         }
 
         // GET: BookController
-        public async Task<ActionResult> Index()
+        public async Task<ActionResult> Index(string QueryString)
         {
+            var vm = new QueryViewModel();
+            if (QueryString != null)
+            {
+                var books = await _GBService.GetAllBooks(QueryString);
+                vm.Books = books;
+                vm.QueryString = QueryString ;
+                return View(vm);
+            }
+            else
+            {
+                return View(vm);
+            }
+
             //will need to update to pass in the search parameter - 
-            var books = await _GBService.GetAllBooks("Harry Potter");
-            return View();
         }
 
         // GET: BookController/Details/5
@@ -32,15 +44,15 @@ namespace Readz.Controllers
             return View();
         }
 
-        
-
-       
-
-        
-
-        
 
 
-        
+
+
+
+
+
+
+
+
     }
 }

@@ -12,6 +12,8 @@ namespace Readz.GoogleBooks.Models
         // (volumeInfo is a nest object of this object)
         public GoogleBooksVolumeInfo VolumeInfo { get; set; }
 
+        public GoogleBooksVolumeInfo Id { get; set; }
+
 
     }
 }

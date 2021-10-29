@@ -16,6 +16,6 @@ namespace Readz.GoogleBooks.Models
 
         public string PublishedDate { get; set; }
 
-        public string ImageLinks { get; set; }
+        public GoogleBooksImage ImageLinks { get; set; }
     }
 }

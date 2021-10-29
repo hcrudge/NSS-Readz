@@ -5,11 +5,8 @@ using System.Threading.Tasks;
 
 namespace Readz.GoogleBooks.Models
 {
-    public class QueryViewModel
+    public class GoogleBooksImage
     {
-        public string QueryString { get; set; }
-
-        public List<GoogleBooksItem> Books { get; set; }
-
+        public string Thumbnail { get; set; }
     }
 }

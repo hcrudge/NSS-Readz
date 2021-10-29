@@ -6,43 +6,47 @@
 <div class="container pt-5">
     <h1 class="content">Search For a Title</h1>
 
-    <form asp-controller="Book" asp-action="Index">
-        <p>
-            <input type="text" name="queryString" />
-            <button type="button" class="btn" value="Search"> Search</button>
+    <form asp-controller="Book" asp-action="Index" >
+            <p>
+                <input asp-for="QueryString" class="form-control"/>
+                <button type="submit" class="btn" asp-controller="Book" asp-action="Index" value="Search"> Search</button>
 
-        </p>
-    </form>
-    @if (Model.queryString == "null")
-    { }
-    else
+            </p>
+        </form>
+    @if (Model.QueryString != null)
     {
 
-<section class="container content">
+
     @foreach (var item in Model.Books)
     {
-
-        <img style="width:30px; float:left;margin-right:10px"
-             src="@item.VolumeInfo.ImageLinks" alt="bookCover" />
-
-        <div>
-            <lable class="font-weight-bold">Title:</lable>
-            <span>@item.VolumeInfo.Title</span>
-        </div>
-        <div>
-            <lable class="font-weight-bold">Author(s): </lable>
-                <span>@item.VolumeInfo.Authors</span>
-        </div>
-        <div>
-            <lable class="font-weight-bold">Synopsis: </lable>
+        <section class="container content">
+            @if (item.VolumeInfo.ImageLinks != null)
+            {
+            <img style="width:80px; float:left;margin-right:10px"
+                 src="@item.VolumeInfo.ImageLinks.Thumbnail" alt="bookCover" />
+            }
+            <div>
+                <label class="font-weight-bold">Title:</label>
+                <span>@item.VolumeInfo.Title</span>
+            </div>
+            <div>
+                <label class="font-weight-bold">Author(s): </label>
+                <span>@item.VolumeInfo.Authors[0]</span>
+            </div>
+            <div>
+                <label class="font-weight-bold">Synopsis: </label>
                 <span>@item.VolumeInfo.Description</span>
-        </div>
+            </div>
+            <a class="btn" style="float:right;margin-left:5px">Select Title</a>
+        <br/>
+        <br/>
+        </section>
+        <br />
+
     }
 
-
-
-</section>
     }
+    else { }
 
 </div>
 
