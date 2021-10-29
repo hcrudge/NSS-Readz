@@ -15,5 +15,7 @@ namespace Readz.GoogleBooks.Models
         public string Description { get; set; }
 
         public string PublishedDate { get; set; }
+
+        public string ImageLinks { get; set; }
     }
 }

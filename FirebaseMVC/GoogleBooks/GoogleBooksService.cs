@@ -61,14 +61,6 @@ namespace Readz.GoogleBooks
             return googleBooksResponse.Items;
         }
         
-        
-
-
-
-
-
-
-
 
     }
 }

@@ -7,7 +7,7 @@ namespace Readz.GoogleBooks.Models
 {
     public class QueryViewModel
     {
-        public string SearchString { get; set; }
+        public string queryString { get; set; }
 
         public List<GoogleBooksItem> Books { get; set; }
 

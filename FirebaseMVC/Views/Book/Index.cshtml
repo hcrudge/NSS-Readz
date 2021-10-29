@@ -1,35 +1,48 @@
-﻿@model IEnumerable<Readz.GoogleBooks.Models.QueryViewModel>
+﻿@model Readz.GoogleBooks.Models.QueryViewModel
 
 @{
     ViewData["Title"] = "Index";
 }
+<div class="container pt-5">
+    <h1 class="content">Search For a Title</h1>
 
-<h1 class="content">Hello from Book Index!</h1>
+    <form asp-controller="Book" asp-action="Index">
+        <p>
+            <input type="text" name="queryString" />
+            <button type="button" class="btn" value="Search"> Search</button>
 
-@*<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.SearchString)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.SearchString)
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
-            </td>
-        </tr>
-}
-    </tbody>
-</table>*@
+        </p>
+    </form>
+    @if (Model.queryString == "null")
+    { }
+    else
+    {
+
+<section class="container content">
+    @foreach (var item in Model.Books)
+    {
+
+        <img style="width:30px; float:left;margin-right:10px"
+             src="@item.VolumeInfo.ImageLinks" alt="bookCover" />
+
+        <div>
+            <lable class="font-weight-bold">Title:</lable>
+            <span>@item.VolumeInfo.Title</span>
+        </div>
+        <div>
+            <lable class="font-weight-bold">Author(s): </lable>
+                <span>@item.VolumeInfo.Authors</span>
+        </div>
+        <div>
+            <lable class="font-weight-bold">Synopsis: </lable>
+                <span>@item.VolumeInfo.Description</span>
+        </div>
+    }
+
+
+
+</section>
+    }
+
+</div>
+
