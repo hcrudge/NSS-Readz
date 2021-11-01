@@ -10,17 +10,20 @@ using System.Threading.Tasks;
 using System.Security.Claims;
 using Readz.Models.ViewModels;
 
+
 namespace Readz.Controllers
 {
     [Authorize]
     public class PostController : Controller
     {
         private readonly IPostRepository _postRepository;
-        
+        private readonly IUserProfileRepository _userProfileRepository;
 
-        public PostController(IPostRepository postRepository)
+
+        public PostController(IPostRepository postRepository, IUserProfileRepository userProfileRepository)
         {
             _postRepository = postRepository;
+            _userProfileRepository = userProfileRepository;
         }
 
 
@@ -33,7 +36,8 @@ namespace Readz.Controllers
             //user's id
             var vm = new PostListViewModel() { UserId = GetCurrentUserProfileId() };
 
-            vm.Posts =  _postRepository.GetAllPublishedPosts();
+
+            vm.Posts = _postRepository.GetAllPublishedPosts();
             return View(vm);
         }
 
@@ -57,66 +61,55 @@ namespace Readz.Controllers
             return View(vm);
         }
 
-        // GET: PostController/Create
-        public ActionResult Create()
+        public ActionResult MyProfile()
         {
-            return View();
+            int userId = GetCurrentUserProfileId();
+            var myProfile = _userProfileRepository.GetById(userId);
+            var myPosts = _postRepository.GetMyPosts(userId);
+            var vm = new PostListViewModel() { Posts = myPosts, UserId = userId, User = myProfile };
+            return View(vm);
         }
 
-        // POST: PostController/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public IActionResult Edit(int id)
         {
+            var post = _postRepository.GetPublishedPostById(id);
+
+            var vm = new PostDetailsViewModel();
+
+            vm.Post = post;
+
+            return View(vm);
+        }
+        [HttpPost]
+        public IActionResult Edit(PostDetailsViewModel postDetailsViewModel)
+        {
+            var post = postDetailsViewModel.Post;
+
             try
             {
-                return RedirectToAction(nameof(Index));
+                _postRepository.Update(post);
+
+                return RedirectToAction("Details", new { id = post.Id });
             }
-            catch
+            catch (Exception ex)
             {
-                return View();
+                return View(postDetailsViewModel);
             }
         }
 
-        // GET: PostController/Edit/5
-        public ActionResult Edit(int id)
-        {
-            return View();
-        }
-
-        // POST: PostController/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // GET: PostController/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
 
         // POST: PostController/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+     
+        public IActionResult Delete(Post post)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                _postRepository.Delete(post);
+                return RedirectToAction("Index");
             }
-            catch
+            catch (Exception ex)
             {
-                return View();
+                return RedirectToAction("Details", new { id = post.Id });
             }
         }
 

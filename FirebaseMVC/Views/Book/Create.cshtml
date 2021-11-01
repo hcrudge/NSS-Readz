@@ -1,0 +1,70 @@
+﻿@model Readz.Models.ViewModels.PostCreateViewModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+<div class="container pt-5">
+    <div class="row justify-content-center container">
+        <div class="card col-md-12 col-lg-8">
+            <h3 class=" text-primary text-center card-title">Create a Review:</h3>
+            <form class=" card-body" asp-action="CreatePost">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    @if (!string.IsNullOrWhiteSpace(Model.Book.VolumeInfo.ImageLinks.Thumbnail))
+                    {
+                        <section class=" content row justify-content-center">
+                            <div>
+                                <img class="justify-content-center" src="@Model.Book.VolumeInfo.ImageLinks.Thumbnail" />
+                                <h2>@Model.Book.VolumeInfo.Title</h2>
+                                <h3>By: @Model.Book.VolumeInfo.Authors[0]</h3>
+                                <div class="font-weight-bold">Synopsis: @Model.Book.VolumeInfo.Description</div>
+                            </div>
+                        </section>
+                    }
+                    else
+                    { <section class=" content row justify-content-center">
+                            <div>
+                                <img class="justify-content-center" src="@Model.Post.BookCover" />
+                                <h2>@Model.Post.BookTitle</h2>
+                                <h3>By: @Model.Post.BookAuthor[0]</h3>
+                                <div class="font-weight-bold">Synopsis: @Model.Post.BookSynopsis</div>
+                            </div>
+                        </section>}
+
+                    <div class="form-group">
+                        
+                        <input type="hidden" asp-for="Post.BookCover" value="@Model.Book.VolumeInfo.ImageLinks.Thumbnail"class="form-control" />
+                        <input type="hidden" asp-for="Post.BookTitle" value="@Model.Book.VolumeInfo.Title"class="form-control" />
+                        <input type="hidden" asp-for="Post.BookAuthor" value="@Model.Book.VolumeInfo.Authors[0]"class="form-control" />
+                        <input type="hidden" asp-for="Post.BookSynopsis" value="@Model.Book.VolumeInfo.Description"class="form-control" />
+                       
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Post.PostTitle" class="control-label"></label>
+                        <input asp-for="Post.PostTitle" class="form-control" />
+                        <span asp-validation-for="Post.PostTitle" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Post.ReviewContent" class="control-label"></label>
+                        <textarea asp-for="Post.ReviewContent" rows="15" class="form-control post__content-input"></textarea>
+                        <span asp-validation-for="Post.ReviewContent" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" value="Create Post" class="btn btn-primary" />
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div>
+            <a asp-action="Index">Back to List</a>
+        </div>
+    </div>
+
+
+</div>
+
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

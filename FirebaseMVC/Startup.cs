@@ -6,7 +6,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Readz.Auth;
+using Readz.GoogleBooks;
 using Readz.Repositories;
+
 
 namespace Readz
 {
@@ -27,6 +29,7 @@ namespace Readz
             services.AddTransient<IFirebaseAuthService, FirebaseAuthService>();
             services.AddTransient<IUserProfileRepository, UserProfileRepository>();
             services.AddTransient<IPostRepository, PostRepository>();
+            services.AddTransient<IGoogleBooksService, GoogleBooksService>();
 
             services.AddControllersWithViews().AddRazorRuntimeCompilation();
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
