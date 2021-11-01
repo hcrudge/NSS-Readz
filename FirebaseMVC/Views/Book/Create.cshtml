@@ -31,7 +31,14 @@
                             </div>
                         </section>}
 
-
+                    <div class="form-group">
+                        
+                        <input type="hidden" asp-for="Post.BookCover" value="@Model.Book.VolumeInfo.ImageLinks.Thumbnail"class="form-control" />
+                        <input type="hidden" asp-for="Post.BookTitle" value="@Model.Book.VolumeInfo.Title"class="form-control" />
+                        <input type="hidden" asp-for="Post.BookAuthor" value="@Model.Book.VolumeInfo.Authors[0]"class="form-control" />
+                        <input type="hidden" asp-for="Post.BookSynopsis" value="@Model.Book.VolumeInfo.Description"class="form-control" />
+                       
+                    </div>
                     <div class="form-group">
                         <label asp-for="Post.PostTitle" class="control-label"></label>
                         <input asp-for="Post.PostTitle" class="form-control" />

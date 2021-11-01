@@ -12,7 +12,7 @@ namespace Readz.Repositories
 
         List<Post> GetMyPosts(int userId);
 
-        void Add(Post post, GoogleBooksItem book);
+        void Add(Post post);
         void Update(Post post);
         void Delete(Post post);
 

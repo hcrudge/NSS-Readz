@@ -55,7 +55,7 @@ namespace Readz.Controllers
             vm.Post.PublishedOn = DateAndTime.Now;
             vm.Post.UserProfileId = GetCurrentUserProfileId();
             
-            _postRepository.Add(vm.Post, vm.Book);
+            _postRepository.Add(vm.Post);
             return RedirectToAction("Index", "Post");
         }
 

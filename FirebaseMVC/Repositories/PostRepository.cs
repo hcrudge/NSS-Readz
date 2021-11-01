@@ -126,7 +126,7 @@ namespace Readz.Repositories
 
 
 
-        public void Add(Post post, GoogleBooksItem book)
+        public void Add(Post post)
         {
             using (var conn = Connection)
             {
@@ -143,10 +143,10 @@ namespace Readz.Repositories
                             @UserProfileId)";
                     cmd.Parameters.AddWithValue("@PostTitle", post.PostTitle);
                     cmd.Parameters.AddWithValue("@ReviewContent", post.ReviewContent);
-                    cmd.Parameters.AddWithValue("@BookTitle", book.VolumeInfo.Title);
-                    cmd.Parameters.AddWithValue("@BookAuthor", book.VolumeInfo.Authors);
-                    cmd.Parameters.AddWithValue("@BookCover", book.VolumeInfo.ImageLinks.Thumbnail);
-                    cmd.Parameters.AddWithValue("@BookSynopsis", book.VolumeInfo.Description);
+                    cmd.Parameters.AddWithValue("@BookTitle", post.BookTitle);
+                    cmd.Parameters.AddWithValue("@BookAuthor", post.BookAuthor);
+                    cmd.Parameters.AddWithValue("@BookCover", post.BookCover);
+                    cmd.Parameters.AddWithValue("@BookSynopsis", post.BookSynopsis);
                     cmd.Parameters.AddWithValue("@PublishedOn", DbUtils.ValueOrDBNull(post.PublishedOn));
                     cmd.Parameters.AddWithValue("@UserProfileId", post.UserProfileId);
 
@@ -184,23 +184,15 @@ namespace Readz.Repositories
                 {
                     cmd.CommandText = @"UPDATE Post SET
                                       PostTitle = @PostTitle,
-                                      ReviewContent = @ReviewContent,
-                                      BookTitle = @BookTitle,
-                                      BookCover = @BookCover,
-                                      BookAuthor = @BookAuthor, 
-                                      BookSynopsis = @BookSynopsis, 
-                                      PublishedOn = @PublishedOn,
+                                      ReviewContent = @ReviewContent, 
+                                      PublishedOn = @PublishedOn
                               
                                       WHERE Id = @id";
 
                     cmd.Parameters.AddWithValue("@id", post.Id);
                     cmd.Parameters.AddWithValue("@PostTitle", post.PostTitle);
                     cmd.Parameters.AddWithValue("@ReviewContent", post.ReviewContent);
-                    cmd.Parameters.AddWithValue("@BookCover", DbUtils.ValueOrDBNull(post.BookCover));
-                    cmd.Parameters.AddWithValue("@BookTitle", post.BookTitle);
                     cmd.Parameters.AddWithValue("@PublishedOn", DbUtils.ValueOrDBNull(post.PublishedOn));
-                    cmd.Parameters.AddWithValue("@BookAuthor", post.BookAuthor);
-                    cmd.Parameters.AddWithValue("@BookSynopsis", post.BookSynopsis);
 
                     cmd.ExecuteNonQuery();
 
