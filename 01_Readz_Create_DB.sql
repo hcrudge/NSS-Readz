@@ -38,8 +38,8 @@ CREATE TABLE [Post] (
   [ReviewContent] nvarchar(1000) NOT NULL,
   [BookTitle] nvarchar(255) NOT NULL,
   [BookAuthor] nvarchar(255) NOT NULL,
-  [BookCover] nvarchar(255) NOT NULL,
-  [BookSynopsis] nvarchar(1000) NOT NULL,
+  [BookCover] nvarchar(1000) NOT NULL,
+  [BookSynopsis] nvarchar(2000) NOT NULL,
   [PublishedOn] datetime,
   [UserProfileId] integer NOT NULL,
 
