@@ -33,10 +33,10 @@
                 </div>
             </section>
         }
-        <section class="row justify-content-center">
+        <section class="row content justify-content-center">
             <h5>Review: @Model.Post.ReviewContent</h5>
         </section>
-        <div class="row justify-content-center">
+        <div class="row content justify-content-center">
             @*Check for whether user has delete permissions(post was made by current user)*@
 
             @if (Model.Post.UserProfileId == Model.CurrentUserId)

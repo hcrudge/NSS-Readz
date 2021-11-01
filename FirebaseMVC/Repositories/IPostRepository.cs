@@ -9,6 +9,13 @@ namespace Readz.Repositories
         List<Post> GetAllPublishedPosts();
 
         Post GetPublishedPostById(int id);
+
+        List<Post> GetMyPosts(int userId);
+
         void Add(Post post, GoogleBooksItem book);
+        void Update(Post post);
+        void Delete(Post post);
+
+
     }
 }

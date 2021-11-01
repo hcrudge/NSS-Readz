@@ -45,11 +45,7 @@ namespace Readz.Controllers
         {
             var vm = new PostCreateViewModel() { CurrentUserId = GetCurrentUserProfileId() };
             var book = await _GBService.GetBookByGBId(Id);
-            
-            vm.Post.BookTitle = book.VolumeInfo.Title;
-            vm.Post.BookCover = book.VolumeInfo.ImageLinks.Thumbnail;
-            vm.Post.BookAuthor = book.VolumeInfo.Authors[0];
-            vm.Post.BookSynopsis = book.VolumeInfo.Description;
+            vm.Book = book;
             return View(vm);
         }
 
@@ -58,6 +54,7 @@ namespace Readz.Controllers
         {
             vm.Post.PublishedOn = DateAndTime.Now;
             vm.Post.UserProfileId = GetCurrentUserProfileId();
+            
             _postRepository.Add(vm.Post, vm.Book);
             return RedirectToAction("Index", "Post");
         }

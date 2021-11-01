@@ -83,6 +83,48 @@ namespace Readz.Repositories
             }
         }
 
+        public List<Post> GetMyPosts(int userId)
+        {
+            using (var conn = Connection)
+            {
+                conn.Open();
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"
+                       SELECT p.Id, p.PostTitle, p.ReviewContent, 
+                              p.BookTitle, p.BookAuthor, 
+                              p.BookCover, p.BookSynopsis,
+                              p.PublishedOn, p.UserProfileId,
+                            
+                              u.UserName, u.Email, u.ImageLocation
+                              
+                         FROM Post p                              
+                              LEFT JOIN UserProfile u ON p.UserProfileId = u.id
+                              
+                        WHERE PublishedOn < SYSDATETIME() AND p.UserProfileId = @userId
+                        ORDER BY p.PublishedOn DESC";
+
+                    cmd.Parameters.AddWithValue("@userId", userId);
+
+                    var reader = cmd.ExecuteReader();
+
+                    var posts = new List<Post>();
+
+                    while (reader.Read())
+                    {
+                        posts.Add(NewPostFromReader(reader));
+                    }
+
+                    reader.Close();
+
+                    return posts;
+                }
+            }
+        }
+
+
+
+
 
         public void Add(Post post, GoogleBooksItem book)
         {
@@ -93,19 +135,19 @@ namespace Readz.Repositories
                 {
                     cmd.CommandText = @"
                         INSERT INTO Post (
-                            PostTitle, ReviewContent, BookTitle, ,BookAuthor, BookCover, BookSynopsis , PublishedOn,
+                            PostTitle, ReviewContent, BookTitle, BookAuthor, BookCover, BookSynopsis, PublishedOn,
                                 UserProfileId)
                         OUTPUT INSERTED.ID
                         VALUES (
                             @PostTitle, @ReviewContent, @BookTitle, @BookAuthor, @BookCover, @BookSynopsis, @PublishedOn,
                             @UserProfileId)";
-                    cmd.Parameters.AddWithValue("@Title", post.PostTitle);
-                    cmd.Parameters.AddWithValue("@Content", post.ReviewContent);
+                    cmd.Parameters.AddWithValue("@PostTitle", post.PostTitle);
+                    cmd.Parameters.AddWithValue("@ReviewContent", post.ReviewContent);
                     cmd.Parameters.AddWithValue("@BookTitle", book.VolumeInfo.Title);
                     cmd.Parameters.AddWithValue("@BookAuthor", book.VolumeInfo.Authors);
-                    cmd.Parameters.AddWithValue("@ImageLocation", book.VolumeInfo.ImageLinks.Thumbnail);
+                    cmd.Parameters.AddWithValue("@BookCover", book.VolumeInfo.ImageLinks.Thumbnail);
                     cmd.Parameters.AddWithValue("@BookSynopsis", book.VolumeInfo.Description);
-                    cmd.Parameters.AddWithValue("@PublishDateTime", DbUtils.ValueOrDBNull(post.PublishedOn));
+                    cmd.Parameters.AddWithValue("@PublishedOn", DbUtils.ValueOrDBNull(post.PublishedOn));
                     cmd.Parameters.AddWithValue("@UserProfileId", post.UserProfileId);
 
                     post.Id = (int)cmd.ExecuteScalar();
@@ -131,6 +173,42 @@ namespace Readz.Repositories
                 }
             }
         }
+
+        public void Update(Post post)
+        {
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"UPDATE Post SET
+                                      PostTitle = @PostTitle,
+                                      ReviewContent = @ReviewContent,
+                                      BookTitle = @BookTitle,
+                                      BookCover = @BookCover,
+                                      BookAuthor = @BookAuthor, 
+                                      BookSynopsis = @BookSynopsis, 
+                                      PublishedOn = @PublishedOn,
+                              
+                                      WHERE Id = @id";
+
+                    cmd.Parameters.AddWithValue("@id", post.Id);
+                    cmd.Parameters.AddWithValue("@PostTitle", post.PostTitle);
+                    cmd.Parameters.AddWithValue("@ReviewContent", post.ReviewContent);
+                    cmd.Parameters.AddWithValue("@BookCover", DbUtils.ValueOrDBNull(post.BookCover));
+                    cmd.Parameters.AddWithValue("@BookTitle", post.BookTitle);
+                    cmd.Parameters.AddWithValue("@PublishedOn", DbUtils.ValueOrDBNull(post.PublishedOn));
+                    cmd.Parameters.AddWithValue("@BookAuthor", post.BookAuthor);
+                    cmd.Parameters.AddWithValue("@BookSynopsis", post.BookSynopsis);
+
+                    cmd.ExecuteNonQuery();
+
+                }
+            }
+        }
+
+
 
 
 
