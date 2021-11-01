@@ -30,6 +30,7 @@ namespace Readz
             services.AddTransient<IUserProfileRepository, UserProfileRepository>();
             services.AddTransient<IPostRepository, PostRepository>();
             services.AddTransient<IGoogleBooksService, GoogleBooksService>();
+            services.AddTransient<ITagRepository, TagRepository>();
 
             services.AddControllersWithViews().AddRazorRuntimeCompilation();
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
