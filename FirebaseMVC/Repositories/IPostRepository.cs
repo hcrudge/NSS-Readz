@@ -1,5 +1,6 @@
 ﻿using Readz.Models;
 using System.Collections.Generic;
+using Readz.GoogleBooks.Models;
 
 namespace Readz.Repositories
 {
@@ -8,5 +9,6 @@ namespace Readz.Repositories
         List<Post> GetAllPublishedPosts();
 
         Post GetPublishedPostById(int id);
+        void Add(Post post, GoogleBooksItem book);
     }
 }

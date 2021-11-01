@@ -12,7 +12,7 @@ namespace Readz.GoogleBooks
     {
        
         private const string GOOGLE_BOOKS_QUERY_BASE_URL =
-            "https://www.googleapis.com/books/v1/volumes?q=";
+            "https://www.googleapis.com/books/v1/volumes";
 
 
         private readonly IHttpClientFactory _httpClientFactory;
@@ -43,7 +43,7 @@ namespace Readz.GoogleBooks
             //concatenating the baseUrl, encoded querystring param,
             //"&key=, and the firebaseApi
             //encoded here rather than in the request variable below to return the correct format.
-            var url = GOOGLE_BOOKS_QUERY_BASE_URL + HttpUtility.UrlEncode(queryString) + "&key=" + _firebaseApiKey;
+            var url = GOOGLE_BOOKS_QUERY_BASE_URL + "?q=" + HttpUtility.UrlEncode(queryString) + "&orderBy=relevance&key=" + _firebaseApiKey;
 
             //Http Get method
             var request = new HttpRequestMessage(HttpMethod.Get, url);
@@ -60,7 +60,33 @@ namespace Readz.GoogleBooks
 
             return googleBooksResponse.Items;
         }
-        
+
+
+        public async Task<GoogleBooksItem> GetBookByGBId(string GBId)
+        {
+            //store an instance of HTTPClient in the variable 
+            var client = _httpClientFactory.CreateClient();
+
+            //concatenating the baseUrl, encoded querystring param,
+            //"&key=, and the firebaseApi
+            //encoded here rather than in the request variable below to return the correct format.
+            var url = GOOGLE_BOOKS_QUERY_BASE_URL + "/" +  HttpUtility.UrlEncode(GBId);
+
+            //Http Get method
+            var request = new HttpRequestMessage(HttpMethod.Get, url);
+
+            // waits for the response from GoogleBooks and stores it in the variable
+            var response = await client.SendAsync(request);
+
+            //waits for the response and turns the HTTP response into a string  
+            var content = await response.Content.ReadAsStringAsync();
+
+            //parses the response into an instance of type GooglebooksResponse
+            var googleBooksResponse =
+                JsonSerializer.Deserialize<GoogleBooksItem>(content, _jsonSerializerOptions);
+
+            return googleBooksResponse;
+        }
 
     }
 }

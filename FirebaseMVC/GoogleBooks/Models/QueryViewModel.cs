@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+
 
 namespace Readz.GoogleBooks.Models
 {
@@ -10,6 +8,8 @@ namespace Readz.GoogleBooks.Models
         public string QueryString { get; set; }
 
         public List<GoogleBooksItem> Books { get; set; }
+
+        public GoogleBooksItem Book { get; set; }
 
     }
 }

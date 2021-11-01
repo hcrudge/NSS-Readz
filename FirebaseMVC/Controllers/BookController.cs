@@ -1,22 +1,24 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using Readz.GoogleBooks;
 using Readz.GoogleBooks.Models;
+using Readz.Models.ViewModels;
+using Readz.Repositories;
+using System.Security.Claims;
+using Microsoft.VisualBasic;
 
 namespace Readz.Controllers
 {
     public class BookController : Controller
     {
         private readonly IGoogleBooksService _GBService;
+        private readonly IPostRepository _postRepository;
 
         //Dependency Injection
-        public BookController(IGoogleBooksService googleBooksService)
+        public BookController(IGoogleBooksService googleBooksService, IPostRepository postRepository)
         {
             _GBService = googleBooksService;
+            _postRepository = postRepository;
         }
 
         // GET: BookController
@@ -35,13 +37,29 @@ namespace Readz.Controllers
                 return View(vm);
             }
 
-            //will need to update to pass in the search parameter - 
+            
         }
 
         // GET: BookController/Details/5
-        public ActionResult Details(int id)
+        public async Task<ActionResult> Create(string Id)
         {
-            return View();
+            var vm = new PostCreateViewModel() { CurrentUserId = GetCurrentUserProfileId() };
+            var book = await _GBService.GetBookByGBId(Id);
+            
+            vm.Post.BookTitle = book.VolumeInfo.Title;
+            vm.Post.BookCover = book.VolumeInfo.ImageLinks.Thumbnail;
+            vm.Post.BookAuthor = book.VolumeInfo.Authors[0];
+            vm.Post.BookSynopsis = book.VolumeInfo.Description;
+            return View(vm);
+        }
+
+        [HttpPost]
+        public IActionResult CreatePost(PostCreateViewModel vm)
+        {
+            vm.Post.PublishedOn = DateAndTime.Now;
+            vm.Post.UserProfileId = GetCurrentUserProfileId();
+            _postRepository.Add(vm.Post, vm.Book);
+            return RedirectToAction("Index", "Post");
         }
 
 
@@ -51,8 +69,11 @@ namespace Readz.Controllers
 
 
 
-
-
+        private int GetCurrentUserProfileId()
+        {
+            string id = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            return int.Parse(id);
+        }
 
     }
 }

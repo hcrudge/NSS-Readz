@@ -12,5 +12,7 @@ namespace Readz.GoogleBooks.Models
         public int TotalItems { get; set; }
 
         public List<GoogleBooksItem> Items { get; set; }
+
+        public GoogleBooksItem Item { get; set; }
     }
 }

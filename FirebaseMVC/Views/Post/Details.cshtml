@@ -1,15 +1,15 @@
 ﻿@model Readz.Models.ViewModels.PostDetailsViewModel
 
 @{
-    ViewData["Title"] = $"Post - {Model.Post.PostTitle}";
+   ViewData["Title"] = $"Post - {Model.Post.PostTitle}";
 }
 
 
 <div class="container pt-5">
-    <div class="post content">
+    <div class="post">
         <section class="px-3">
             <div class="row justify-content-between">
-                <h1 class="text-secondary">@Model.Post.PostTitle</h1>
+                <h1 class=" text text-secondary">@Model.Post.PostTitle</h1>
             </div>
             @*<div class="row">
                     <h4>Tag(s): </h4>
@@ -19,6 +19,24 @@
             <div class="row">
             </div>
 
+
+        </section>
+        <hr />
+        @if (!string.IsNullOrWhiteSpace(Model.Post.BookCover))
+        {
+            <section class=" content row justify-content-center">
+                <div>
+                    <img src="@Model.Post.BookCover"/>
+                    <h2>@Model.Post.BookTitle</h2>
+                    <h3>By: @Model.Post.BookAuthor</h3>
+                    <div>Synopsis: @Model.Post.BookSynopsis</div>
+                </div>
+            </section>
+        }
+        <section class="row justify-content-center">
+            <h5>Review: @Model.Post.ReviewContent</h5>
+        </section>
+        <div class="row justify-content-center">
             @*Check for whether user has delete permissions(post was made by current user)*@
 
             @if (Model.Post.UserProfileId == Model.CurrentUserId)
@@ -31,29 +49,13 @@
                     Delete
                 </a>
                 @*<a asp-controller="PostTag" asp-action="Create" asp-route-id="@Model.Post.Id" class="btn btn-outline-primary mx-1" title="PostTag">
-                    Manage Tags
-                </a>
-                <a asp-controller="PostTag" asp-action="Delete" asp-route-id="@Model.Post.Id" class="btn btn-outline-primary mx-1" title="PostTag">
-                    Delete Tags
-                </a>*@
+                Manage Tags
+            </a>
+            <a asp-controller="PostTag" asp-action="Delete" asp-route-id="@Model.Post.Id" class="btn btn-outline-primary mx-1" title="PostTag">
+                Delete Tags
+            </a>*@
             }
-
-        </section>
-        <hr />
-        @if (!string.IsNullOrWhiteSpace(Model.Post.BookCover))
-        {
-            <section class="row justify-content-center">
-                <div>
-                    <img src="@Model.Post.BookCover"/>
-                    <h2>@Model.Post.BookTitle</h2>
-                    <h3>By: @Model.Post.BookAuthor</h3>
-                    <div>Synopsis: @Model.Post.BookSynopsis</div>
-                </div>
-            </section>
-        }
-        <section class="row justify-content-center">
-            <h5>Review: @Model.Post.ReviewContent</h5>
-        </section>
+        </div>
     </div>
     <a asp-action="Index">Back to List</a>
 </div>

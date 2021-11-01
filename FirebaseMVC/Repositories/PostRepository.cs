@@ -6,6 +6,7 @@ using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using Readz.Models;
 using Readz.Utils;
+using Readz.GoogleBooks.Models;
 
 namespace Readz.Repositories
 {
@@ -81,6 +82,38 @@ namespace Readz.Repositories
                 }
             }
         }
+
+
+        public void Add(Post post, GoogleBooksItem book)
+        {
+            using (var conn = Connection)
+            {
+                conn.Open();
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"
+                        INSERT INTO Post (
+                            PostTitle, ReviewContent, BookTitle, ,BookAuthor, BookCover, BookSynopsis , PublishedOn,
+                                UserProfileId)
+                        OUTPUT INSERTED.ID
+                        VALUES (
+                            @PostTitle, @ReviewContent, @BookTitle, @BookAuthor, @BookCover, @BookSynopsis, @PublishedOn,
+                            @UserProfileId)";
+                    cmd.Parameters.AddWithValue("@Title", post.PostTitle);
+                    cmd.Parameters.AddWithValue("@Content", post.ReviewContent);
+                    cmd.Parameters.AddWithValue("@BookTitle", book.VolumeInfo.Title);
+                    cmd.Parameters.AddWithValue("@BookAuthor", book.VolumeInfo.Authors);
+                    cmd.Parameters.AddWithValue("@ImageLocation", book.VolumeInfo.ImageLinks.Thumbnail);
+                    cmd.Parameters.AddWithValue("@BookSynopsis", book.VolumeInfo.Description);
+                    cmd.Parameters.AddWithValue("@PublishDateTime", DbUtils.ValueOrDBNull(post.PublishedOn));
+                    cmd.Parameters.AddWithValue("@UserProfileId", post.UserProfileId);
+
+                    post.Id = (int)cmd.ExecuteScalar();
+                }
+            }
+        }
+
+
 
         public void Delete(Post post)
         {

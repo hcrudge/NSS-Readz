@@ -7,5 +7,6 @@ namespace Readz.GoogleBooks
     public interface IGoogleBooksService
     {
         Task<List<GoogleBooksItem>> GetAllBooks(string queryString);
+        Task<GoogleBooksItem> GetBookByGBId(string GBId);
     }
 }

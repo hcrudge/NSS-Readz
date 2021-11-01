@@ -4,7 +4,7 @@
     ViewData["Title"] = "Index";
 }
 <div class="container pt-5">
-    <h1 class="content">Search For a Title</h1>
+    <h1 class="content">Search For a Title:</h1>
 
     <form asp-controller="Book" asp-action="Index" >
             <p>
@@ -37,7 +37,7 @@
                 <label class="font-weight-bold">Synopsis: </label>
                 <span>@item.VolumeInfo.Description</span>
             </div>
-            <a class="btn" style="float:right;margin-left:5px">Select Title</a>
+            <a type="submit" value="Create" asp-action="Create" asp-route-id="@item.Id" class="btn" style="float:right;margin-left:5px">Select Title</a>
         <br/>
         <br/>
         </section>
