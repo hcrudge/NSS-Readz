@@ -9,7 +9,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Security.Claims;
 using Readz.Models.ViewModels;
-
+using Microsoft.VisualBasic;
 
 namespace Readz.Controllers
 {
@@ -76,7 +76,10 @@ namespace Readz.Controllers
 
             var vm = new PostDetailsViewModel();
 
+
             vm.Post = post;
+            vm.Post.PublishedOn = DateAndTime.Now;
+            vm.Post.UserProfileId = GetCurrentUserProfileId();
 
             return View(vm);
         }
@@ -89,7 +92,7 @@ namespace Readz.Controllers
             {
                 _postRepository.Update(post);
 
-                return RedirectToAction("Details", new { id = post.Id });
+                return RedirectToAction("Details", new { id = post.Id } );
             }
             catch (Exception ex)
             {

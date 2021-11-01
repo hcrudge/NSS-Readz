@@ -184,15 +184,15 @@ namespace Readz.Repositories
                 {
                     cmd.CommandText = @"UPDATE Post SET
                                       PostTitle = @PostTitle,
-                                      ReviewContent = @ReviewContent, 
-                                      PublishedOn = @PublishedOn
+                                      ReviewContent = @ReviewContent
+                                    
                               
                                       WHERE Id = @id";
 
                     cmd.Parameters.AddWithValue("@id", post.Id);
                     cmd.Parameters.AddWithValue("@PostTitle", post.PostTitle);
                     cmd.Parameters.AddWithValue("@ReviewContent", post.ReviewContent);
-                    cmd.Parameters.AddWithValue("@PublishedOn", DbUtils.ValueOrDBNull(post.PublishedOn));
+                 
 
                     cmd.ExecuteNonQuery();
 
