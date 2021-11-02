@@ -74,24 +74,21 @@ namespace Readz.Controllers
             }
         }
 
-        // GET: TagController/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
+       
 
-        // POST: TagController/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+     
+       
+        public ActionResult Delete(Tag tag)
         {
             try
             {
+                _tagRepo.DeleteTag(tag.Id);
+
                 return RedirectToAction(nameof(Index));
             }
-            catch
+            catch (Exception ex)
             {
-                return View();
+                return View("Index");
             }
         }
     }

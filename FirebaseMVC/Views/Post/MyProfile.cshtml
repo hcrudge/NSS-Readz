@@ -2,11 +2,11 @@
 @{ ViewData["Title"] = "Profile";}
 
 <div>
-    <h1 class="mb-4">@Model.User.UserName</h1>
+    <h1 class="mb-4 content">@Model.User.UserName</h1>
 
-    <section class="container">
+    <section class="container content">
         <img style="width:100px;float:left;margin-right:20px"
-             src="@Model.User.ImageLocation." />
+             src="@Model.User.ImageLocation" />
         <div>
             <label class="font-weight-bold">Email:</label>
             <span>@Model.User.Email</span>
@@ -19,7 +19,7 @@
 
     <div class="row">
         <section class="col-8 container mt-5">
-            <h1 class="text-left">My Posts</h1>
+            <h1 class="text-left content">My Posts</h1>
 
             <div class="row content">
                 @foreach (Post post in Model.Posts)
