@@ -26,11 +26,6 @@ namespace Readz.Controllers
             return View(tags);
         }
 
-        // GET: TagController/Details/5
-        public ActionResult Details(int id)
-        {
-            return View();
-        }
 
         // GET: TagController/Create
         public ActionResult Create()
@@ -41,43 +36,52 @@ namespace Readz.Controllers
         // POST: TagController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public ActionResult Create(Tag tag)
         {
-            try
+            List<Tag> tags = _tagRepo.GetAllTags();
+
+            if (tags.Any(t => t.Name == tag.Name))
             {
-                return RedirectToAction(nameof(Index));
+                ModelState.AddModelError("", "Tag already exists.");
+                return View(tag);
             }
-            catch
+            else
             {
-                return View();
+                try
+                {
+                    _tagRepo.AddTag(tag);
+                    return RedirectToAction("Index");
+                }
+                catch (Exception ex)
+                {
+                    return View(tag);
+                }
             }
         }
 
         // GET: TagController/Edit/5
         public ActionResult Edit(int id)
         {
-            return View();
+            Tag tag = _tagRepo.GetTagById(id);
+            return View(tag);
         }
 
         // POST: TagController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public ActionResult Edit(int id, Tag tag)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                _tagRepo.UpdateTag(tag);
+                return RedirectToAction("Index");
             }
-            catch
+            catch (Exception ex)
             {
-                return View();
+                return View(tag);
             }
         }
 
-       
-
-     
-       
         public ActionResult Delete(Tag tag)
         {
             try

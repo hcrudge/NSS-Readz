@@ -28,8 +28,8 @@
                         @Html.DisplayFor(modelItem => item.Name)
                     </td>
                     <td>
-                        @Html.ActionLink("Edit", "Edit", new { id = item.Id }, new { @class = "btn" })
-                        
+                        @*@Html.ActionLink("Edit", "Edit", new { id = item.Id }, new { @class = "btn" })*@
+                        <a class ="btn" href="@Url.Action("Edit", new { id = item.Id })">Edit</a>
                         <a asp-action="Delete" asp-route-id="@item.Id" class="btn" title="Delete"
                            onclick="return confirm('Are you sure you wish to delete the tag ' + @item.Name + '?');">
                             Delete
