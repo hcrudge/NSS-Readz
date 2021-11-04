@@ -18,16 +18,14 @@ namespace Readz.Controllers
     {
         private readonly IPostRepository _postRepository;
         private readonly IUserProfileRepository _userProfileRepository;
+        private readonly IPostTagRepository _postTagRepository;
 
-
-        public PostController(IPostRepository postRepository, IUserProfileRepository userProfileRepository)
+        public PostController(IPostRepository postRepository, IUserProfileRepository userProfileRepository, IPostTagRepository postTagRepository)
         {
             _postRepository = postRepository;
             _userProfileRepository = userProfileRepository;
+            _postTagRepository = postTagRepository;
         }
-
-
-
 
         // GET: PostController
         public IActionResult Index()
@@ -36,8 +34,8 @@ namespace Readz.Controllers
             //user's id
             var vm = new PostListViewModel() { UserId = GetCurrentUserProfileId() };
 
-
             vm.Posts = _postRepository.GetAllPublishedPosts();
+
             return View(vm);
         }
 
@@ -56,6 +54,7 @@ namespace Readz.Controllers
                 Post = post,
                 CurrentUserId = userId,
                 PostId = id,
+                PostTag = _postTagRepository.GetAllPostTags(id)
             };
 
             return View(vm);
