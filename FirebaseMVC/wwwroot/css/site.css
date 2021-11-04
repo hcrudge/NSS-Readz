@@ -88,6 +88,7 @@ body {
 }
 .text {
     z-index:1;
+    color: black;
 }
 
 .btn {

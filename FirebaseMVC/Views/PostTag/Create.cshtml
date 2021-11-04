@@ -1,0 +1,43 @@
+﻿@model Readz.Models.ViewModels.PostTagViewModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<div class="container pt-5">
+
+
+    <h4 class="content">Please select tag(s) from below:</h4>
+    <hr />
+    <div class=" content row">
+        <div class="col-md-4">
+            <form asp-action="Create">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <input asp-for="PostId" type="hidden" />
+                </div>
+                <div class="form-group">
+                    <label asp-for="TagsSelected" class="control-label"> Select Tags</label>
+                    <select multiple="multiple" asp-for="TagsSelected" class="form-control">
+                        @foreach(var tag in Model.Tag)
+                        { 
+                            <option value="@tag.Id">@tag.Name</option>
+                        }
+                    </select>
+                    <span asp-validation-for="TagsSelected" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Add Selected Tag(s)" class="btn" />
+                    <a asp-controller="Post" asp-action="Details" asp-route-id="@Model.PostId" class="btn ">
+                        Back to Post
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+   
+</div>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
